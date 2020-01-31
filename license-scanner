@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Command line entry point for the LicenseScanner project.
+
+set -e
+
+kss/license/scanner.py $@
