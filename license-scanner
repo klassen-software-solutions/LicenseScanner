@@ -4,4 +4,4 @@
 
 set -e
 
-kss/license/scanner.py $@
+python3 -m kss.license.entry_point $@
