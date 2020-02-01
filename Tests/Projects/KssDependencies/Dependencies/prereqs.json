@@ -1,0 +1,8 @@
+[
+    { "git": "https://github.com/klassen-software-solutions/ksstest.git" },
+    { "git": "https://github.com/klassen-software-solutions/ksscontract.git" },
+    { "tarball": "https://dont.care.about.this/someproj-1.0.3.tar.gz" },
+    { "tarball": "https://dont.care.about.this/nolicensefile-1.2.3.tar.gz" },
+    { "tarball": "https://dont.care.about.this/nodirectory.tar.gz" },
+    { "pip": "requests" }
+]
