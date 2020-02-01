@@ -1,10 +1,12 @@
 """API for the scanning architecture."""
 
+import bisect
 import logging
 
 from abc import ABC, abstractmethod
 from typing import Dict, List
 
+from .github import GitHub
 from .spdx import SPDX
 
 
@@ -12,6 +14,7 @@ class Scanner(ABC):
     """Base class defining the scanning API."""
 
     _spdx = SPDX()
+    _github = GitHub()
 
     @abstractmethod
     def should_scan(self) -> bool:
@@ -53,15 +56,17 @@ class Scanner(ABC):
                              lic['moduleLicense'])
 
     def _resolve_details_and_add_license(self, lic: Dict, licenses: Dict):
-        entry = self._spdx.search(lic['moduleLicense'])
+        if 'moduleLicense' not in lic:
+            lic['moduleLicense'] = 'Unknown'
+        entry = self._spdx.search(lic.get('moduleLicense', None))
         if entry:
             self._set_spdx_info_into_license(entry, lic)
-#        else:
-#            licenseid = self._github.lookup(lic.get('moduleUrl', None))
-#            if licenseid:
-#                entry = self._spdx.get_entry(licenseid)
-#                if entry:
-#                    self._set_spdx_info_into_license(entry, lic)
+        else:
+            licenseid = self._github.lookup(lic.get('moduleUrl', None))
+            if licenseid:
+                entry = self._spdx.get_entry(licenseid)
+                if entry:
+                    self._set_spdx_info_into_license(entry, lic)
         licenses[lic['moduleName']] = lic
 
     @classmethod

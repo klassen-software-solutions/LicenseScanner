@@ -48,10 +48,10 @@ def step_impl(context):
 def step_impl(context, count):
     assert len(context.licenses['dependencies']) == count, "Should have %d entries" % count
 
-@then(u'module "{module}" should have a "{license}" license with a "{spdx}" spdx entry')
+@then(u'module "{module}" should be "{license}" with a "{spdx}" spdx id')
 def step_impl(context, module, license, spdx):
     license = _unescape(license)
     entry = _find_entry(module, context.licenses)
     assert entry is not None, "Module %s should have an entry" % module
-    assert entry['moduleLicense'] == license, "Module %s should be a %s license" % (module, license)
+    assert entry['moduleLicense'] == license, "Module %s should be a %s" % (module, license)
     assert entry['x-spdxId'] == spdx, "Module %s should have %s spdx id" % (module, spdx)

@@ -7,7 +7,6 @@ import json
 import logging
 import os
 import pathlib
-import sys
 
 from typing import Dict, List
 
