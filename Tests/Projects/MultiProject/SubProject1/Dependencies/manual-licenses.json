@@ -1,0 +1,9 @@
+[
+    {
+        "moduleLicense": "Mozilla Public License 1.1",
+        "moduleLicenseUrl": "https://www.rabbitmq.com/mpl.html",
+        "moduleName": "rabbitmq",
+        "moduleUrl": "https://www.rabbitmq.com",
+        "x-comments": "This is the simple example that just gets copied"
+    }
+]

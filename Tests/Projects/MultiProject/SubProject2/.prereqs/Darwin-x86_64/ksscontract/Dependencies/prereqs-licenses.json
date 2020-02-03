@@ -1,0 +1,15 @@
+{
+    "dependencies": [
+        {
+            "moduleLicense": "MIT License",
+            "moduleLicenseUrl": "https://opensource.org/licenses/MIT",
+            "moduleName": "ksstest",
+            "moduleUrl": "https://github.com/klassen-software-solutions/ksstest.git",
+            "x-isOsiApproved": true,
+            "x-spdxId": "MIT",
+            "x-usedBy": [
+                "ksscontract"
+            ]
+        }
+    ]
+}

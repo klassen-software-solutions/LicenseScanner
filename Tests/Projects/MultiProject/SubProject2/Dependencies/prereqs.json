@@ -1,0 +1,4 @@
+[
+    { "git": "https://github.com/klassen-software-solutions/ksscontract.git" },
+    { "pip": "requests" }
+]

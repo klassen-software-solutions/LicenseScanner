@@ -10,6 +10,7 @@ import pathlib
 
 from typing import Dict, List
 
+from .kss_prereqs_scanner import KSSPrereqsScanner
 from .manual_scanner import ManualScanner
 
 
@@ -27,10 +28,10 @@ def _parse_command_line(args: List):
                         help='Output file, relative to the scanned directory. Default is '
                         + '"Dependencies/prereqs-licenses.json")')
     parser.add_argument('--manual-licenses',
-                        default='Dependencies/manual-licenses.json',
+                        default='manual-licenses.json',
                         metavar='FILENAME',
-                        help='File containing manually generated license entries, relative to '
-                        + 'the scanned directory. Default is "Dependencies/manual-licenses.json")')
+                        help='File containing manually generated license entries, within '
+                        + 'the scanned directory. Default is "manual-licenses.json")')
     return parser.parse_args(args)
 
 
@@ -75,9 +76,11 @@ def scan(args: List = None):
     try:
         os.chdir(directory)
         licenses = {}
-        scanners = [ManualScanner(manualentries)]
+        scanners = [ManualScanner(modulename, manualentries),
+                    KSSPrereqsScanner(modulename)
+                    ]
         for scanner in scanners:
-            scanner.add_licenses(modulename, licenses)
+            scanner.add_licenses(licenses)
         _write_licenses(outputfile, licenses)
     finally:
         os.chdir(cwd)
