@@ -221,7 +221,7 @@ class GitHub:
         if self._remaining_calls > 0:
             self._remaining_calls -= 1
             return
-        raise NotAvailableException("Out of GitHub API calls (%d allowed), try again later.",
+        raise NotAvailableException("Out of GitHub API calls (%d allowed), try again later." %
                                     allowable_calls)
 
     @classmethod
