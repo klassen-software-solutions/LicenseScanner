@@ -47,7 +47,8 @@ def step_impl(context):
 
 @then(u'there should be {count:d} modules')
 def step_impl(context, count):
-    assert len(context.licenses['dependencies']) == count, "Should have %d entries" % count
+    found = len(context.licenses['dependencies'])
+    assert found == count, "Should have %d entries, found %d" % (count, found)
 
 @then(u'the project should be used by {count:d} modules')
 def step_impl(context, count):

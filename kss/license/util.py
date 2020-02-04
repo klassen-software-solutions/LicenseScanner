@@ -179,16 +179,14 @@ class GitHub:
         return None
 
     def _try_api(self, key: str, organization: str) -> List:
-        if self._can_call_github():
-            try:
-                return jsonreader.from_url("https://api.github.com/%s/%s/repos"
-                                           % (key, organization))
-            # pylint: disable=broad-except
-            #   Justification: We really do want to trap all non-system-exiting exceptions.
-            except Exception:
-                pass
-        else:
-            raise NotAvailableException("Out of GitHub API calls, try again later.")
+        self._ensure_can_call_github()
+        try:
+            return jsonreader.from_url("https://api.github.com/%s/%s/repos"
+                                       % (key, organization))
+        # pylint: disable=broad-except
+        #   Justification: We really do want to trap all non-system-exiting exceptions.
+        except Exception:
+            pass
         return None
 
     @classmethod
@@ -212,21 +210,19 @@ class GitHub:
                     break
         return host, organization, project
 
-    def _can_call_github(self) -> bool:
-        try:
-            if self._remaining_calls == -1:
-                result = jsonreader.from_url("https://api.github.com/rate_limit")
-                self._remaining_calls = result['rate']['remaining']
-            logging.debug("GitHub API calls remaining: %d", self._remaining_calls)
-            if self._remaining_calls > 0:
-                self._remaining_calls -= 1
-                return True
-            return False
-        # pylint: disable=broad-except
-        #   Justification: We really do want to trap all non-system-exiting exceptions.
-        except Exception as ex:
-            logging.warning("%s", ex)
-            return False
+    def _ensure_can_call_github(self):
+        allowable_calls = 0
+        if self._remaining_calls == -1:
+            result = jsonreader.from_url("https://api.github.com/rate_limit")
+            self._remaining_calls = result['rate']['remaining']
+            allowable_calls = result['rate']['limit']
+        logging.debug("GitHub API calls remaining: %d of %d",
+                      self._remaining_calls, allowable_calls)
+        if self._remaining_calls > 0:
+            self._remaining_calls -= 1
+            return
+        raise NotAvailableException("Out of GitHub API calls (%d allowed), try again later.",
+                                    allowable_calls)
 
     @classmethod
     def _license_from_entry(cls, projects: List, project_name: str) -> str:
