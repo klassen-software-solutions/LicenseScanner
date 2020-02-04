@@ -1,0 +1,47 @@
+name: On Push
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Setup Python
+      if: |
+        !startsWith(github.event.head_commit.message, 'WIP')
+        && !startsWith(github.ref, 'refs/tags/')
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+
+    - name: Install Extras
+      if: |
+        !startsWith(github.event.head_commit.message, 'WIP')
+        && !startsWith(github.ref, 'refs/tags/')
+      run: |
+        python3 -m pip install --user --upgrade pip wheel setuptools
+        python3 -m pip install behave
+        sudo ./install-ninka.sh /usr/local
+
+    - name: Run tests
+      if: |
+        !startsWith(github.event.head_commit.message, 'WIP')
+        && !startsWith(github.ref, 'refs/tags/')
+      run: |
+        git submodule update --init --recursive
+        make install
+        make check
+
+    - name: Static Analysis
+      if: |
+        !startsWith(github.event.head_commit.message, 'WIP')
+        && runner.os == 'macOS'
+        && startsWith(github.ref, 'refs/heads/feature/')
+      run: |
+        sudo python3 -m pip install pylint
+        make analyze

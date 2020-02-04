@@ -13,7 +13,7 @@ Feature: Dependency Tracking
      And module "ksstest" should be "MIT License" with a "MIT" spdx id
 
   Scenario: Project with KSS style dependencies
-    When we scan the "KSSDependencies" project
+    When we scan the "KssDependencies" project
     Then there should be an output file
      And there should be 11 modules
      And the project should be used by 6 modules
