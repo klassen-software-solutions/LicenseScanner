@@ -1,0 +1,15 @@
+{
+    "dependencies": [
+        {
+            "moduleLicense": "Creative Commons Attribution 3.0 Unported",
+            "moduleName": "spdx",
+            "moduleUrl": "https://spdx.org",
+            "x-comments": "This entry refers to the spdx-licenses.json file",
+            "x-isOsiApproved": false,
+            "x-spdxId": "CC-BY-3.0",
+            "x-usedBy": [
+                "LicenseScanner"
+            ]
+        }
+    ]
+}

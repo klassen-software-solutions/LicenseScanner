@@ -1,0 +1,8 @@
+[
+    {
+        "moduleLicense": "CC-BY-3.0",
+        "moduleName": "spdx",
+        "moduleUrl": "https://spdx.org",
+        "x-comments": "This entry refers to the spdx-licenses.json file"
+    }
+]

@@ -1,0 +1,7 @@
+*.egg-info
+*.bak
+__pycache__
+Tests/**/tmp-prereqs-licenses.json
+dist
+REVISION
+

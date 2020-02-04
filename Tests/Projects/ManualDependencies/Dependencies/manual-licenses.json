@@ -1,0 +1,22 @@
+[
+    {
+        "moduleLicense": "BSD-3-Clause",
+        "moduleLicenseUrl": "https://opensource.org/licenses/BSD-3-Clause",
+        "moduleName": "libuuid",
+        "moduleUrl": "https://sourceforge.net/projects/libuuid/",
+        "moduleVersion": "1.0.3",
+        "x-comments": "This example should resolve BSD-3-Clause to the longer name"
+    },
+    {
+        "moduleLicense": "Mozilla Public License 1.1",
+        "moduleLicenseUrl": "https://www.rabbitmq.com/mpl.html",
+        "moduleName": "rabbitmq",
+        "moduleUrl": "https://www.rabbitmq.com",
+        "x-comments": "This is the simple example that just gets copied"
+    },
+    {
+        "moduleName": "ksstest",
+        "moduleUrl": "https://github.com/klassen-software-solutions/ksstest",
+        "x-comments": "This example should use the github api to resolve the license"
+    }
+]
