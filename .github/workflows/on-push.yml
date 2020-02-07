@@ -2,12 +2,15 @@ name: On Push
 
 on: [push]
 
+# Note that while this package supports both Linux and MacOS, for some reason the
+# GitHub API will not work from the GitHub Mac VMs. Hence we only run the CI on
+# Linux.
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v1
 
@@ -40,8 +43,7 @@ jobs:
     - name: Static Analysis
       if: |
         !startsWith(github.event.head_commit.message, 'WIP')
-        && runner.os == 'macOS'
         && startsWith(github.ref, 'refs/heads/feature/')
       run: |
-        sudo python3 -m pip install pylint
+        python3 -m pip install pylint
         make analyze

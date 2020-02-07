@@ -1,4 +1,5 @@
 PREFIX := kss
+PACKAGE := license
 
 include BuildSystem/python/common.mk
 
