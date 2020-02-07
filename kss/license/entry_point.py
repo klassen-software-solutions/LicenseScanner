@@ -7,16 +7,19 @@ import json
 import logging
 import os
 import pathlib
+import sys
 
 from typing import Dict, List
 
 from .kss_prereqs_scanner import KSSPrereqsScanner
 from .manual_scanner import ManualScanner
+from . import __version__
 
 
 def _parse_command_line(args: List):
     parser = argparse.ArgumentParser()
     parser.add_argument('--verbose', action='store_true', help='Show debugging information')
+    parser.add_argument('--version', action='store_true', help='Show version number and then exit')
     parser.add_argument('--directory',
                         default='.',
                         help='Directory to be scanned (defaults to the current working directory)')
@@ -55,6 +58,10 @@ def scan(args: List = None):
     """
 
     options = _parse_command_line(args)
+    if options.version:
+        print(__version__)
+        sys.exit()
+
     logging.getLogger().setLevel(logging.DEBUG if options.verbose else logging.INFO)
 
     if not os.path.isdir(options.directory):
