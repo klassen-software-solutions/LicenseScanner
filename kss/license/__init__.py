@@ -1,4 +1,4 @@
 # pylint: disable=missing-module-docstring
 #   Justification: The init should not require a docstring.
-
-__version__ = '1.0.0.dev'
+from ._version import _INTERNAL_VERSION
+__version__ = _INTERNAL_VERSION
