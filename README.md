@@ -51,7 +51,7 @@ repository as it helps trace problems.
 The development branch will not be merged into the master branch until we are ready to create the
 next release.
 
-_One note on the CI_: The mac version is failing regularly stating that there are no GitHub API calls available.
-I do not know if this is permanent (it has lasted for a few hours and the count is supposed to reset every
-hour) so for now you can ignore the fact that it is failing. If it continues I will likely disable that particular
-test on the mac version of the CI.
+_One note on the CI_: For some reason the macOS GitHub VMs always report that no GitHub API calls
+are available, causing the behave tests to fail. As a result we only run the CI on the Linux VMs. Any changes
+you create are still required to work on the mac, but the testing must be done on a development machine
+and not in the CI.
