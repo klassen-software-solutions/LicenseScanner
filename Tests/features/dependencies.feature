@@ -29,11 +29,19 @@ Feature: Dependency Tracking
      And module "nolicensefile" should be "Unknown" with no spdx id
      And module "nodirectory" should be "Unknown" with no spdx id
 
+  Scenario: Project with Swift style dependencies
+    When we scan the "SwiftDependencies" project
+    Then there should be an output file
+     And there should be 2 modules
+     And the project should be used by 2 modules
+     And module "swift-nio" should be "Apache License 2.0" with a "Apache-2.0" spdx id
+     And module "swift-nio-transport-services" should be "Apache License 2.0" with a "Apache-2.0" spdx id
+
   Scenario: Project combining all styles of dependencies
     When we scan the "MultiProject" project
     Then there should be an output file
-     And there should be 8 modules
-     And the project should be used by 6 modules
+     And there should be 9 modules
+     And the project should be used by 7 modules
      And module "ksstest" should be "MIT License" with a "MIT" spdx id
      And module "ksscontract" should be "MIT License" with a "MIT" spdx id
      And module "requests" should be "Apache License 2.0" with a "Apache-2.0" spdx id
@@ -42,3 +50,4 @@ Feature: Dependency Tracking
      And module "chardet" should be "GNU Lesser General Public License v2.1 only" with a "LGPL-2.1" spdx id
      And module "idna" should be "BSD-like" with no spdx id
      And module "rabbitmq" should be "Mozilla Public License 1.1" with a "MPL-1.1" spdx id
+     And module "swift-nio" should be "Apache License 2.0" with a "Apache-2.0" spdx id
