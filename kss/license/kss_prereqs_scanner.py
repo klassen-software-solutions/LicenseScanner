@@ -1,8 +1,9 @@
-"""Scanner that handles dependancies of the form used by the KSS BuildSystem."""
+"""Scanner that handles dependencies of the form used by the KSS BuildSystem."""
 
 import logging
 import os
 import urllib.parse
+from operator import itemgetter
 from typing import Dict, List, Tuple
 
 import kss.util.command as command
@@ -32,21 +33,20 @@ class KSSPrereqsScanner(DirectoryScanner):
 
     def get_project_list(self) -> List:
         assert self._prereqs is not None, "Guaranteed by return of should_scan()"
-        projects = {}
+        projects = []
         if self._prereqs:
             for filename in self._prereqs:
                 logging.info("   searching '%s'", filename)
                 entries, pips = self._get_projects_for_prereqs_file(filename)
                 if entries:
-                    logging.info("      found %s", sorted([sub['name'] for sub in entries]))
-                    for entry in entries:
-                        key = entry['name']
-                        if key not in projects:
-                            projects[key] = entry
+                    entries.sort(key=itemgetter('name'))
+                    logging.info("      found %s", [sub['name'] for sub in entries])
+                    projects.extend(entries)
                 if pips:
-                    logging.info("      found %s", sorted(pips))
+                    pips.sort()
+                    logging.info("      found %s", pips)
                     self._pips.extend(pips)
-        return sorted(projects.values(), key=lambda x: x['name'])
+        return projects
 
     def pre_project_callback(self, project: Dict) -> List:
         newlicenses = self._get_existing_prereqs_for_project(project)
