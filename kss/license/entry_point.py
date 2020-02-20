@@ -13,6 +13,7 @@ from typing import Dict, List
 
 from .kss_prereqs_scanner import KSSPrereqsScanner
 from .manual_scanner import ManualScanner
+from .swift_scanner import SwiftModuleScanner
 from . import __version__
 
 
@@ -84,6 +85,7 @@ def scan(args: List = None):
         os.chdir(directory)
         licenses = {}
         scanners = [ManualScanner(modulename, manualentries),
+                    SwiftModuleScanner(modulename),
                     KSSPrereqsScanner(modulename)
                     ]
         for scanner in scanners:
