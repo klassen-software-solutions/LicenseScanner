@@ -31,25 +31,13 @@ In addition, a new subproject should be added to `Tests/Projects/MultiProject` a
 multi-project scenarious should be updated, to ensure that the new scanner will also work on
 projects that are a part of a larger one.
 
-## Git Procedures
+## Coding Standards and Procedures
 
-* The main development branch is currently `development/v1`. It should be your starting point.
-* Your working branch should be of the form `feature/99-some-description` where `99` is referencing an issue number.
-* When you checkin your branch the CI will automatically run the tests and the static analysis. You should have
-done this manually before checking in to reduce the number of times that the CI fails.
-* If you prefix your check with `WIP:` then the CI will assume it is a work in progress and will not run
-the checks or the analysis. Do this when you are just trying to save your state and don't actually want
-the CI to run.
-* Before you merge your feature into the development branch, try to squash your commits to eliminate
-large numbers of `WIP` checkins. But if this gives you grief, then don't bother. It is not the end of the
-world if you cannot.
-* Do not use fast-forward merging when merging into the development branch. We want to see the
-create commit and the separate branch.
-* Do not remove your branch when you are done. You can remove it locally, but we want to see it in the
-repository as it helps trace problems.
-* When your check has been merged into the development branch, you are essentially done with the issue.
-The development branch will not be merged into the master branch until we are ready to create the
-next release.
+If you are going to contribute to this project, please make yourself familiar with the following
+standards and procedures.
+
+* [Git Procedures](https://www.kss.cc/standards-git.html)
+* [Python Coding Standards](https://www.kss.cc/standards-python.html)
 
 _One note on the CI_: For some reason the macOS GitHub VMs always report that no GitHub API calls
 are available, causing the behave tests to fail. As a result we only run the CI on the Linux VMs. Any changes
