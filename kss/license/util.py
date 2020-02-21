@@ -1,12 +1,13 @@
 """Misc. utils used by the license package."""
 
+import base64
 import json
 import logging
 import os
 import pkgutil
 import urllib.parse
 
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 import kss.util.command as command
 import kss.util.jsonreader as jsonreader
@@ -37,6 +38,12 @@ def find_all(name: str, directory: str = ".", isdir: bool = False, skipprefix: s
     return matches
 
 
+def read_encoded(filename: str) -> str:
+    """Read a file and return the base64 encoding of its contents."""
+    with open(filename, 'rb') as infile:
+        return base64.b64encode(infile.read()).decode('utf-8')
+
+
 class NotAvailableException(Exception):
     """Specifies that a resource is not available, but may be in the future."""
 
@@ -45,16 +52,17 @@ class Ninka:
     """Utility class used to guess a license given a directory."""
 
     @classmethod
-    def guess_license(cls, dirname: str) -> str:
+    def guess_license(cls, dirname: str) -> Tuple:
         """Given a directory, attempt to find a license file and identify it.
 
-        This will always return a string, which will be 'Unknown' if the license
-        could not be determined.
+        This returns a tuple of two strings, the first is the license type or 'Unknown'
+        if the license could not be determined. The second is the license filename or
+        None if no suitable file was found.
         """
         filename = cls._get_license_filename(dirname)
         if filename:
-            return cls.guess_license_by_file(filename)
-        return 'Unknown'
+            return (cls.guess_license_by_file(filename), filename)
+        return ('Unknown', None)
 
     @classmethod
     def guess_license_by_file(cls, filename: str) -> str:

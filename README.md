@@ -9,6 +9,25 @@ Utility for scanning a project to determine the licenses used by its dependencie
 * kss-pyutil (can be installed by running `python3 -m pip install kss-pyutil` or `make install`)
 * pylint (can be installed by running `python3 -m pip install pylint`)
 
+## Format of the Output License File
+
+The license file we create is a JSON file based on the one defined in the GitHub project
+'jk1/Gradle-License-Report', but with a few additional fields.
+
+The main fields that we populate are as follows:
+
+* `moduleName`: The name of the prerequisite module.
+* `moduleVersion`: (Optional) The version of the module if it can be determined.
+* `moduleLicense`: The name of the license used or `Unknown` if it could not be determined.
+* `moduleUrl`: (Optional) Identifies the source of the module if it can be determined.
+
+In addition, we add the following fields:
+
+* `x-usedBy`: Will list all the prerequisites that use this module.
+* `x-spdxId`: (Optional) Set if the license can be identified in the SPDX database.
+* `x-isOsiApproved`: (Optional) Set to `true` if SPDX identifies this license type as OSI approved.
+* `x-licenseTextEncoded`: (Optional) Full text of the license, base64 encoded.
+
 ## Commands for Developing
 
 * `git submodule update --init --recursive` is needed after checking out to update the build system
