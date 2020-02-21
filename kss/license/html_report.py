@@ -35,7 +35,7 @@ def _write_licenses(licenses: Dict, local_license_filename: str, filename: str):
         outfile.write("<head>\n")
         outfile.write("<style>\n")
         outfile.write(pkgutil.get_data(__name__, 'resources/_styles.css').decode('utf-8'))
-        outfile.write("</style\n")
+        outfile.write("</style>\n")
         outfile.write("</head>\n")
         outfile.write("<body>\n")
         _write_local_license(local_license_filename, outfile)
@@ -79,7 +79,7 @@ def _write_license(lic: Dict, spdx, outfile):
 def _write_license_details(lic: Dict, spdx, outfile):
     name = lic.get('moduleLicense', None)
     if name:
-        outfile.write("  <li>License: %s\n" % html.escape(name))
+        outfile.write("  <li>License: %s</li>\n" % html.escape(name))
         _write_license_text(lic, outfile)
         spdxid = lic.get('x-spdxId', None)
         if spdxid:
