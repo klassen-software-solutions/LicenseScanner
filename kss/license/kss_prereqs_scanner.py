@@ -11,7 +11,7 @@ import kss.util.jsonreader as jsonreader
 from kss.util.strings import remove_suffix
 
 from .directory_scanner import DirectoryScanner
-from .util import find_all
+from .util import find_all, read_encoded
 
 
 class KSSPrereqsScanner(DirectoryScanner):
@@ -133,13 +133,16 @@ class KSSPrereqsScanner(DirectoryScanner):
                 for req in requires:
                     self._add_pip_license_for(req, pip, licenses)
             licensetype = details.get('License', None)
+            licensefilename = None
             if not licensetype:
-                licensetype = self._guess_pip_license_using_ninka(details)
+                (licensetype, licensefilename) = self._guess_pip_license_using_ninka(details)
             if not licensetype:
                 licensetype = 'Unknown'
             lic['moduleLicense'] = licensetype
             lic['moduleVersion'] = details.get('Version', None)
             lic['moduleUrl'] = details.get('Home-page', None)
+            if licensefilename:
+                lic['x-licenseTextEncoded'] = read_encoded(licensefilename)
         if used_by:
             self.ensure_used_by(used_by, lic)
         licenses.append(lic)
@@ -184,9 +187,9 @@ class KSSPrereqsScanner(DirectoryScanner):
         pipname = pipdetails.get('Name', None)
         if location and version and pipname:
             dirname = "%s/%s-%s.dist-info" % (location, pipname, version)
-            licensetype = cls.ninka.guess_license(dirname)
+            (licensetype, licensefilename) = cls.ninka.guess_license(dirname)
             if licensetype == 'Unknown':
                 dirname = "%s/%s-%s.dist-info" % (location, pipname.replace('-', '_'), version)
-                licensetype = cls.ninka.guess_license(dirname)
-            return licensetype
-        return None
+                (licensetype, licensefilename) = cls.ninka.guess_license(dirname)
+            return (licensetype, licensefilename)
+        return (None, None)

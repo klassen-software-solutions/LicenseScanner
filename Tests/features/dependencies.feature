@@ -5,12 +5,15 @@ Feature: Dependency Tracking
 
   Scenario: Project with manual dependencies
     When we scan the "ManualDependencies" project
+     And we generate an HTML report
     Then there should be an output file
      And there should be 3 modules
      And the project should be used by 3 modules
      And module "libuuid" should be "BSD 3-Clause \"New\" or \"Revised\" License" with a "BSD-3-Clause" spdx id
      And module "rabbitmq" should be "Mozilla Public License 1.1" with a "MPL-1.1" spdx id
      And module "ksstest" should be "MIT License" with a "MIT" spdx id
+     And there should be an HTML report
+     And the HTML report should include an entry for each license
 
   Scenario: Project with KSS style dependencies
     When we scan the "KssDependencies" project

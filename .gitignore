@@ -3,6 +3,7 @@
 __pycache__
 _version.py
 Tests/**/tmp-prereqs-licenses.json
+Tests/**/t.html
 dist
 REVISION
 

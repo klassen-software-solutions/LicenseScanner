@@ -29,7 +29,7 @@ def _parse_command_line(args: List):
                         + 'directory).')
     parser.add_argument('--output',
                         default='Dependencies/prereqs-licenses.json',
-                        help='Output file, relative to the scanned directory. Default is '
+                        help='Output file, relative to the scanned directory. (Default is '
                         + '"Dependencies/prereqs-licenses.json")')
     parser.add_argument('--manual-licenses',
                         default='manual-licenses.json',

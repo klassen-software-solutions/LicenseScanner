@@ -4,7 +4,7 @@ from typing import Dict, List
 from behave import given, when, then, step
 
 import kss.util.jsonreader as jsonreader
-from kss.license import entry_point
+from kss.license import entry_point, html_report
 
 
 # MARK: Internal Utilities
@@ -29,6 +29,17 @@ def step_impl(context, project):
     entry_point.scan(["--directory=%s" % directory,
                       "--output=Dependencies/tmp-prereqs-licenses.json"])
     context.project = project
+
+@when(u'we generate an HTML report')
+def step_impl(context):
+    directory = "Tests/Projects/%s" % context.project
+    licfile = "%s/DUMMY_LICENSE.txt" % directory
+    prereqsfile = "%s/Dependencies/tmp-prereqs-licenses.json" % directory
+    htmlfile = "%s/t.html" % directory
+    context.htmlfile = htmlfile
+    html_report.generate_report(["--input=%s" % prereqsfile,
+                                 "--local-license=%s" % licfile,
+                                 "--output=%s" % htmlfile])
 
 
 # MARK: Thens
@@ -73,3 +84,17 @@ def step_impl(context, module, license):
     assert entry is not None, "Module %s should have an entry" % module
     assert entry['moduleLicense'] == license, "Module %s should be a %s" % (module, license)
     assert 'x-spdxId' not in entry, "Module %s should not have an spdx id" % module
+
+@then(u'there should be an HTML report')
+def step_impl(context):
+    assert os.path.isfile(context.htmlfile), "HTML report %s should exist" % context.htmlfile
+
+@then(u'the HTML report should include an entry for each license')
+def step_impl(context):
+    with open(context.htmlfile, "r") as infile:
+        data = infile.read()
+        for lic in context.licenses['dependencies']:
+            print("!! lic: %s" % lic)
+            name = lic['moduleName']
+            str = "<li><span class='caret'>%s</span>" % name
+            assert data.find(str) != -1, "Module %s should be in the report" % name
