@@ -7,7 +7,7 @@ import os
 from typing import Dict, List
 
 from .scanner import Scanner
-from .util import Ninka
+from .util import read_encoded, Ninka
 
 
 class DirectoryScanner(Scanner):
@@ -71,7 +71,7 @@ class DirectoryScanner(Scanner):
         directory = entry['directory']
         details['license'] = 'Unknown'
         if directory is not None and os.path.isdir(directory):
-            details['license'] = cls.ninka.guess_license(directory)
+            (details['license'], details['license-filename']) = cls.ninka.guess_license(directory)
         return details
 
     @classmethod
@@ -81,5 +81,8 @@ class DirectoryScanner(Scanner):
             lic['moduleVersion'] = details['version']
         if details['url']:
             lic['moduleUrl'] = details['url']
+        licensefilename = details.get('license-filename', None)
+        if licensefilename:
+            lic['x-licenseTextEncoded'] = read_encoded(licensefilename)
         lic['moduleLicense'] = 'Unknown' if not details['license'] else details['license']
         return lic

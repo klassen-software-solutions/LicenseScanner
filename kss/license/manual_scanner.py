@@ -26,7 +26,7 @@ class ManualScanner(Scanner):
         for filename in self._filenames:
             logging.info("   searching '%s'", filename)
             newentries = jsonreader.from_file(filename)
-            if not isinstance(newentries, list):
+            if not isinstance(newentries, List):
                 raise TypeError("%s should contain a JSON list" % filename)
             logging.info("      found %s", [sub['moduleName'] for sub in newentries])
             entries.extend(newentries)

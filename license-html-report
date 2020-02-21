@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Command line entry point for creating an HTML license report.
+
+set -e
+
+python3 -m kss.license.html_report $@
