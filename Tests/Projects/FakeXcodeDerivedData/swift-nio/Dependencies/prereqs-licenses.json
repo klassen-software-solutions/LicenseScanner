@@ -1,0 +1,12 @@
+{
+    "dependencies": [
+        {
+            "moduleLicense": "Bug35 License",
+            "moduleName": "Bug35",
+            "x-usedBy": [
+                "swift-nio"
+            ]
+        }
+    ]
+}
+
