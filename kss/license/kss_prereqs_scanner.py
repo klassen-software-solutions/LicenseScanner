@@ -48,12 +48,6 @@ class KSSPrereqsScanner(DirectoryScanner):
                     self._pips.extend(pips)
         return projects
 
-    def pre_project_callback(self, project: Dict) -> List:
-        newlicenses = self._get_existing_prereqs_for_project(project)
-        if newlicenses:
-            logging.info("      also found %s", sorted([sub['moduleName'] for sub in newlicenses]))
-        return newlicenses
-
     def scan(self) -> List:
         licenses = []
         licenses.extend(super().scan())
@@ -146,15 +140,6 @@ class KSSPrereqsScanner(DirectoryScanner):
         if used_by:
             self.ensure_used_by(used_by, lic)
         licenses.append(lic)
-
-    @classmethod
-    def _get_existing_prereqs_for_project(cls, project: Dict) -> List:
-        directory = project.get('directory', None)
-        if directory:
-            filename = "%s/Dependencies/prereqs-licenses.json" % directory
-            if os.path.isfile(filename):
-                return jsonreader.from_file(filename)['dependencies']
-        return None
 
     @classmethod
     def _read_file_contents(cls, filename: str) -> str:

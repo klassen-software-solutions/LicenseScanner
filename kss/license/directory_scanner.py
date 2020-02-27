@@ -6,6 +6,8 @@ from abc import abstractmethod
 import os
 from typing import Dict, List
 
+import kss.util.jsonreader as jsonreader
+
 from .scanner import Scanner
 from .util import read_encoded, Ninka
 
@@ -30,6 +32,7 @@ class DirectoryScanner(Scanner):
         for prereq in entries:
             logging.info("   examining '%s'", prereq['name'])
             lics.extend(self.pre_project_callback(prereq) or [])
+            lics.extend(self._get_existing_prereqs_for_project(prereq) or [])
             lics.append(self._process_prereq(prereq))
         return lics
 
@@ -58,6 +61,18 @@ class DirectoryScanner(Scanner):
         Note that the returned list is a list of licenses, not a list of project
         entries.
         """
+        return None
+
+    @classmethod
+    def _get_existing_prereqs_for_project(cls, project: Dict) -> List:
+        directory = project.get('directory', None)
+        if directory:
+            filename = "%s/Dependencies/prereqs-licenses.json" % directory
+            if os.path.isfile(filename):
+                newlicenses = jsonreader.from_file(filename)['dependencies']
+                logging.info("      also found %s",
+                             sorted([sub['moduleName'] for sub in newlicenses]))
+                return newlicenses
         return None
 
     @classmethod
