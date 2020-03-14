@@ -44,15 +44,14 @@ Feature: Dependency Tracking
   Scenario: Project combining all styles of dependencies
     When we scan the "MultiProject" project
     Then there should be an output file
-     And there should be 10 modules
-     And the project should be used by 7 modules
+     And there should be 9 modules
+     And the project should be used by 6 modules
      And module "ksstest" should be "MIT License" with a "MIT" spdx id
      And module "ksscontract" should be "MIT License" with a "MIT" spdx id
      And module "requests" should be "Apache License 2.0" with a "Apache-2.0" spdx id
      And module "certifi" should be "Mozilla Public License 2.0" with a "MPL-2.0" spdx id
      And module "urllib3" should be "MIT License" with a "MIT" spdx id
      And module "chardet" should be "GNU Lesser General Public License v2.1 only" with a "LGPL-2.1" spdx id
-     And module "idna" should be "BSD-like" with no spdx id
      And module "rabbitmq" should be "Mozilla Public License 1.1" with a "MPL-1.1" spdx id
      And module "swift-nio" should be "Apache License 2.0" with a "Apache-2.0" spdx id
      And module "Bug35" should be "Bug35 License" with no spdx id
