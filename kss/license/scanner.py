@@ -14,6 +14,7 @@ class Scanner(ABC):
 
     _spdx = SPDX()
     _github = GitHub()
+    _ignored = set()
 
     def __init__(self, modulename: str):
         self.modulename = modulename
@@ -62,14 +63,25 @@ class Scanner(ABC):
     def _adjust_and_add_new_licenses(self, new_licenses: Dict, licenses: Dict):
         for lic in new_licenses:
             key = lic['moduleName']
-            if key in licenses:
-                self._merge_license(lic, licenses[key])
-                logging.info("   Entry '%s' already exists", lic['moduleName'])
+            if key in self._ignored:
+                logging.info("   Entry '%s' is already marked as ignored", lic['moduleName'])
             else:
-                self._resolve_details_and_add_license(lic, licenses)
-                logging.info("   Added '%s' as '%s'",
-                             lic['moduleName'],
-                             lic['moduleLicense'])
+                if lic.get('x-ignored', False):
+                    self._ignored.add(key)
+                    logging.info("   Ignoring '%s' by request", lic['moduleName'])
+                else:
+                    self._merge_or_add_license(lic, licenses)
+
+    def _merge_or_add_license(self, lic: Dict, licenses: Dict):
+        key = lic['moduleName']
+        if key in licenses:
+            self._merge_license(lic, licenses[key])
+            logging.info("   Entry '%s' already exists", lic['moduleName'])
+        else:
+            self._resolve_details_and_add_license(lic, licenses)
+            logging.info("   Added '%s' as '%s'",
+                         lic['moduleName'],
+                         lic['moduleLicense'])
 
     def _resolve_details_and_add_license(self, lic: Dict, licenses: Dict):
         if self._should_add_to_used_by(lic):

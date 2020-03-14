@@ -28,6 +28,20 @@ In addition, we add the following fields:
 * `x-isOsiApproved`: (Optional) Set to `true` if SPDX identifies this license type as OSI approved.
 * `x-licenseTextEncoded`: (Optional) Full text of the license, base64 encoded.
 
+## Format of the Manual Licenses File
+
+If projects need to add licenses manually, generally because they cannot be automatically determined,
+that is accomplished by creating a `Dependencies/manual-licenses.json` file. This file will
+contain an array of the license objects, in the same format as described above. They will be simply
+copied in, as is, to the output file.
+
+This can also be used to ensure that a dependency is ignored. You may want to ignore a dependency
+if it something that is only used for development and testing, and hence not released with the product,
+or perhaps because it is already covered by another license, or perhaps just to group a large number
+of related dependencies that come from the same source. In any event, you can ignore a dependency
+by including it in the manual license file with the `moduleName` set to the name of the module you
+wish to ignore and the extension field `x-ignored` set to true.
+
 ## Commands for Developing
 
 * `git submodule update --init --recursive` is needed after checking out to update the build system

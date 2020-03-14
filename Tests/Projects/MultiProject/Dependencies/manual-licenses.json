@@ -1,0 +1,7 @@
+[
+    {
+        "moduleName": "idna",
+        "x-ignored": true,
+        "x-comments": "test for 37 - ability to ignore some dependencies"
+    }
+]
