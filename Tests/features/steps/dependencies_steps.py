@@ -55,6 +55,11 @@ def step_impl(context):
     filename = "Tests/Projects/%s/Dependencies/tmp-prereqs-licenses.json" % context.project
     assert os.path.isfile(filename), "%s should exist" % filename
     context.licenses = jsonreader.from_file(filename)
+    metadata = context.licenses.get('generated', None)
+    assert metadata is not None
+    assert metadata.get('process', None) is not None
+    assert metadata.get('project', None) is not None
+    assert metadata.get('time', None) is not None
 
 @then(u'there should be {count:d} modules')
 def step_impl(context, count):
