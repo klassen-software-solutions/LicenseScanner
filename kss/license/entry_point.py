@@ -3,6 +3,7 @@
 """Scans a directory to determine the licenses of its dependancies."""
 
 import argparse
+import datetime
 import json
 import logging
 import os
@@ -39,16 +40,31 @@ def _parse_command_line(args: List):
     return parser.parse_args(args)
 
 
-def _write_licenses(filename: str, licenses: Dict):
+def _write_licenses(filename: str, licenses: Dict, metadata: Dict):
     if len(licenses) > 0:
         outputdir = os.path.dirname(filename)
         if outputdir:
             pathlib.Path(outputdir).mkdir(parents=True, exist_ok=True)
-        data = {'dependencies': sorted(licenses.values(), key=lambda x: x['moduleName'])}
+        data = {
+            'dependencies': sorted(licenses.values(), key=lambda x: x['moduleName']),
+            'generated': metadata
+        }
         with open(filename, 'w') as outfile:
             json.dump(data, outfile, indent=4, sort_keys=True)
     else:
         logging.info("No dependencies found")
+
+def _generated_metadata():
+    args = ""
+    if len(sys.argv) > 1:
+        args = " %s" % ' '.join(sys.argv[1:])
+    metadata = {
+        'time': datetime.datetime.now().astimezone().isoformat(),
+        'process': 'license-scanner%s' % args,
+        'project': os.path.basename(os.getcwd())
+    }
+    return metadata
+
 
 
 def scan(args: List = None):
@@ -90,7 +106,7 @@ def scan(args: List = None):
                     ]
         for scanner in scanners:
             scanner.add_licenses(licenses)
-        _write_licenses(outputfile, licenses)
+        _write_licenses(outputfile, licenses, _generated_metadata())
     finally:
         os.chdir(cwd)
 
