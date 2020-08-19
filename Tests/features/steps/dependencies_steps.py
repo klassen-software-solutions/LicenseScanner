@@ -44,12 +44,6 @@ def step_impl(context):
 
 # MARK: Thens
 
-@then(u'there should be no output file')
-def step_impl(context):
-    filename = "Tests/Projects/%s/Dependencies/tmp-prereqs-licenses.json" % context.project
-    assert not os.path.isfile(filename), "%s should not exist" % filename
-    context.licenses = None
-
 @then(u'there should be an output file')
 def step_impl(context):
     filename = "Tests/Projects/%s/Dependencies/tmp-prereqs-licenses.json" % context.project
