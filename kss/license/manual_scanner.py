@@ -1,7 +1,6 @@
 """Scanner that adds manually specified licenses."""
 
 import logging
-from typing import List
 
 import kss.util.jsonreader as jsonreader
 
@@ -21,12 +20,12 @@ class ManualScanner(Scanner):
         self._filenames = find_all(self._filename, skipprefix="Tests/")
         return bool(self._filenames)
 
-    def scan(self) -> List:
+    def scan(self) -> list:
         entries = []
         for filename in self._filenames:
             logging.info("   searching '%s'", filename)
             newentries = jsonreader.from_file(filename)
-            if not isinstance(newentries, List):
+            if not isinstance(newentries, list):
                 raise TypeError("%s should contain a JSON list" % filename)
             logging.info("      found %s", [sub['moduleName'] for sub in newentries])
             entries.extend(newentries)

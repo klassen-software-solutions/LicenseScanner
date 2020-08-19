@@ -8,24 +8,22 @@ import html
 import logging
 import pkgutil
 
-from typing import Dict, List
-
 import kss.util.jsonreader as jsonreader
 
 from .util import SPDX
 
 
-def _read_licenses(filename: str) -> List:
+def _read_licenses(filename: str) -> list:
     logging.info("Reading licenses from '%s'", filename)
     data = jsonreader.from_file(filename)
     if "dependencies" not in data:
         raise TypeError("%s should contain a dependencies item" % filename)
     licenses = data['dependencies']
-    if not isinstance(licenses, List):
+    if not isinstance(licenses, list):
         raise TypeError("%s: dependencies should contain a JSON list" % filename)
     return licenses
 
-def _write_licenses(licenses: Dict, local_license_filename: str, filename: str):
+def _write_licenses(licenses: dict, local_license_filename: str, filename: str):
     spdx = SPDX()
     logging.info("Writing HTML to '%s'", filename)
     with open(filename, 'w') as outfile:
@@ -63,7 +61,7 @@ def _write_local_license(local_license_filename: str, outfile):
             outfile.write("  </li>\n")
             outfile.write("</ul>\n")
 
-def _write_license(lic: Dict, spdx, outfile):
+def _write_license(lic: dict, spdx, outfile):
     name = lic.get('moduleName', '')
     logging.info("  module: %s", name)
     outfile.write("<!-- %s -->\n" % html.escape(name))
@@ -76,7 +74,7 @@ def _write_license(lic: Dict, spdx, outfile):
     outfile.write("  </ul>\n")
     outfile.write("  </li>\n")
 
-def _write_license_details(lic: Dict, spdx, outfile):
+def _write_license_details(lic: dict, spdx, outfile):
     name = lic.get('moduleLicense', None)
     if name:
         outfile.write("  <li>License: %s</li>\n" % html.escape(name))
@@ -85,7 +83,7 @@ def _write_license_details(lic: Dict, spdx, outfile):
         if spdxid:
             _write_spdx_info(spdx.get_entry(spdxid), outfile)
 
-def _write_license_text(lic: Dict, outfile):
+def _write_license_text(lic: dict, outfile):
     textencoded = lic.get('x-licenseTextEncoded', None)
     if textencoded:
         text = base64.b64decode(textencoded).decode('utf-8')
@@ -95,7 +93,7 @@ def _write_license_text(lic: Dict, outfile):
         outfile.write("  </ul>\n")
         outfile.write("  </li>\n")
 
-def _write_spdx_info(entry: Dict, outfile):
+def _write_spdx_info(entry: dict, outfile):
     if entry:
         seealso = entry.get('seeAlso', None)
         if seealso:
@@ -108,7 +106,7 @@ def _write_spdx_info(entry: Dict, outfile):
             outfile.write("  </li>\n")
 
 
-def _parse_command_line(args: List):
+def _parse_command_line(args: list):
     parser = argparse.ArgumentParser()
     parser.add_argument('--verbose', action='store_true', help='Show debugging information')
     parser.add_argument('--input',
@@ -119,7 +117,7 @@ def _parse_command_line(args: List):
     parser.add_argument('--output', help='Output HTML file', required=True)
     return parser.parse_args(args)
 
-def generate_report(args: List = None):
+def generate_report(args: list = None):
     """Main entry point for the html reporter."
 
     Parameters:
