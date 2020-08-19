@@ -41,18 +41,15 @@ def _parse_command_line(args: List):
 
 
 def _write_licenses(filename: str, licenses: Dict, metadata: Dict):
-    if len(licenses) > 0:
-        outputdir = os.path.dirname(filename)
-        if outputdir:
-            pathlib.Path(outputdir).mkdir(parents=True, exist_ok=True)
-        data = {
-            'dependencies': sorted(licenses.values(), key=lambda x: x['moduleName']),
-            'generated': metadata
-        }
-        with open(filename, 'w') as outfile:
-            json.dump(data, outfile, indent=4, sort_keys=True)
-    else:
-        logging.info("No dependencies found")
+    outputdir = os.path.dirname(filename)
+    if outputdir:
+        pathlib.Path(outputdir).mkdir(parents=True, exist_ok=True)
+    data = {
+        'dependencies': sorted(licenses.values(), key=lambda x: x['moduleName']),
+        'generated': metadata
+    }
+    with open(filename, 'w') as outfile:
+        json.dump(data, outfile, indent=4, sort_keys=True)
 
 def _generated_metadata():
     args = ""

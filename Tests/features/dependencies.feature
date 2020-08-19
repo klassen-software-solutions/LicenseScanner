@@ -1,7 +1,8 @@
 Feature: Dependency Tracking
   Scenario: Project with no dependencies
     When we scan the "NoDependencies" project
-    Then there should be no output file
+    Then there should be an output file
+     And there should be 0 modules
 
   Scenario: Project with manual dependencies
     When we scan the "ManualDependencies" project
