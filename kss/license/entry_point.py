@@ -10,15 +10,13 @@ import os
 import pathlib
 import sys
 
-from typing import Dict, List
-
 from .kss_prereqs_scanner import KSSPrereqsScanner
 from .manual_scanner import ManualScanner
 from .swift_scanner import SwiftModuleScanner
 from . import __version__
 
 
-def _parse_command_line(args: List):
+def _parse_command_line(args: list):
     parser = argparse.ArgumentParser()
     parser.add_argument('--verbose', action='store_true', help='Show debugging information')
     parser.add_argument('--version', action='store_true', help='Show version number and then exit')
@@ -40,7 +38,7 @@ def _parse_command_line(args: List):
     return parser.parse_args(args)
 
 
-def _write_licenses(filename: str, licenses: Dict, metadata: Dict):
+def _write_licenses(filename: str, licenses: dict, metadata: dict):
     outputdir = os.path.dirname(filename)
     if outputdir:
         pathlib.Path(outputdir).mkdir(parents=True, exist_ok=True)
@@ -64,7 +62,7 @@ def _generated_metadata():
 
 
 
-def scan(args: List = None):
+def scan(args: list = None):
     """Main entry point.
 
     Parameters:

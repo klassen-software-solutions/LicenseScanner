@@ -4,7 +4,6 @@ import logging
 import os
 import urllib.parse
 from operator import itemgetter
-from typing import Dict, List, Tuple
 
 import kss.util.command as command
 import kss.util.jsonreader as jsonreader
@@ -31,7 +30,7 @@ class KSSPrereqsScanner(DirectoryScanner):
         self._prereqs = find_all("prereqs.json", skipprefix="Tests/")
         return bool(self._prereqs)
 
-    def get_project_list(self) -> List:
+    def get_project_list(self) -> list:
         assert self._prereqs is not None, "Guaranteed by return of should_scan()"
         projects = []
         if self._prereqs:
@@ -48,18 +47,18 @@ class KSSPrereqsScanner(DirectoryScanner):
                     self._pips.extend(pips)
         return projects
 
-    def scan(self) -> List:
+    def scan(self) -> list:
         licenses = []
         licenses.extend(super().scan())
         licenses.extend(self._get_pip_licenses())
         return licenses
 
-    def _add_directory_base_licenses(self, licenses: Dict):
+    def _add_directory_base_licenses(self, licenses: dict):
         lics = super().scan()
         for lic in lics:
             licenses[lic['moduleName']] = lic
 
-    def _get_projects_for_prereqs_file(self, filename: str) -> (List, List):
+    def _get_projects_for_prereqs_file(self, filename: str) -> (list, list):
         entries = []
         pips = []
         for prereq in jsonreader.from_file(filename):
@@ -71,7 +70,7 @@ class KSSPrereqsScanner(DirectoryScanner):
                 pips.append(prereq['pip'])
         return (entries, pips)
 
-    def _get_entry_from_git_prereq(self, entry: Dict) -> Dict:
+    def _get_entry_from_git_prereq(self, entry: dict) -> dict:
         assert 'git' in entry, "Guaranteed by _get_projects_for_prereqs_file()"
         url = entry['git']
         name = remove_suffix(os.path.basename(urllib.parse.urlparse(url).path), '.git')
@@ -82,7 +81,7 @@ class KSSPrereqsScanner(DirectoryScanner):
             version = self._read_file_contents(filename)
         return {'name': name, 'version': version, 'directory': directory, 'url': url}
 
-    def _get_entry_from_tarball_prereq(self, entry: Dict) -> Dict:
+    def _get_entry_from_tarball_prereq(self, entry: dict) -> dict:
         assert 'tarball' in entry, "Guaranteed by _get_projects_for_prereqs_file()"
         url = entry['tarball']
         filename = entry.get('filename', None)
@@ -91,7 +90,7 @@ class KSSPrereqsScanner(DirectoryScanner):
         (name, version, directory) = self._parse_tarball_name(filename)
         return {'name': name, 'version': version, 'directory': directory, 'url': url}
 
-    def _parse_tarball_name(self, filename: str) -> Tuple:
+    def _parse_tarball_name(self, filename: str) -> tuple:
         name = remove_suffix(filename, '.tar.gz')
         directory = self._find_path_for_project_directory(name)
         parts = name.split('-', 1)
@@ -107,7 +106,7 @@ class KSSPrereqsScanner(DirectoryScanner):
                 return pathname
         return None
 
-    def _get_pip_licenses(self) -> List:
+    def _get_pip_licenses(self) -> list:
         piplicenses = []
         if self._pips:
             for pip in self._pips:
@@ -115,7 +114,7 @@ class KSSPrereqsScanner(DirectoryScanner):
                 self._add_pip_license_for(pip, None, piplicenses)
         return piplicenses
 
-    def _add_pip_license_for(self, pip: str, used_by: str, licenses: List):
+    def _add_pip_license_for(self, pip: str, used_by: str, licenses: list):
         lic = {'moduleName': pip}
         details = self._get_pip_module_details(pip)
         if not details:
@@ -148,7 +147,7 @@ class KSSPrereqsScanner(DirectoryScanner):
         return data.strip()
 
     @classmethod
-    def _get_pip_module_details(cls, pip: str) -> Dict:
+    def _get_pip_module_details(cls, pip: str) -> dict:
         details = {}
         for line in command.process("python3 -m pip show %s" % pip):
             detail = line.split(':', 1)
@@ -166,7 +165,7 @@ class KSSPrereqsScanner(DirectoryScanner):
         return details
 
     @classmethod
-    def _guess_pip_license_using_ninka(cls, pipdetails: Dict) -> str:
+    def _guess_pip_license_using_ninka(cls, pipdetails: dict) -> str:
         location = pipdetails.get('Location', None)
         version = pipdetails.get('Version', None)
         pipname = pipdetails.get('Name', None)

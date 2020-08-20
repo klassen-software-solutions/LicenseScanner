@@ -7,14 +7,12 @@ import os
 import pkgutil
 import urllib.parse
 
-from typing import Dict, List, Tuple
-
 import kss.util.command as command
 import kss.util.jsonreader as jsonreader
 from kss.util.strings import remove_prefix, remove_suffix
 
 
-def find_all(name: str, directory: str = ".", isdir: bool = False, skipprefix: str = None) -> List:
+def find_all(name: str, directory: str = ".", isdir: bool = False, skipprefix: str = None) -> list:
     """File tree walk search.
 
     This method starts at the given directory and performs a deep search for instances
@@ -52,7 +50,7 @@ class Ninka:
     """Utility class used to guess a license given a directory."""
 
     @classmethod
-    def guess_license(cls, dirname: str) -> Tuple:
+    def guess_license(cls, dirname: str) -> tuple:
         """Given a directory, attempt to find a license file and identify it.
 
         This returns a tuple of two strings, the first is the license type or 'Unknown'
@@ -123,11 +121,11 @@ class SPDX:
             SPDX._licenses = licenses
             SPDX._namemap = namemap
 
-    def get_entry(self, licenseid: str) -> Dict:
+    def get_entry(self, licenseid: str) -> dict:
         """Perform a direct search of the spdx id, returning None if it is not there."""
         return self._licenses.get(licenseid, None)
 
-    def search(self, srch: str) -> Dict:
+    def search(self, srch: str) -> dict:
         """Search for an spdx entry.
 
         If srch is an spdx id, then we return the direct result,
@@ -147,7 +145,7 @@ class SPDX:
                           entry['licenseId'])
         return entry
 
-    def _try_name_search(self, name: str) -> Dict:
+    def _try_name_search(self, name: str) -> dict:
         licenseid = self._namemap.get(name, None)
         if licenseid:
             return self.get_entry(licenseid)
@@ -186,7 +184,7 @@ class GitHub:
                 return self._license_from_entry(projects, project)
         return None
 
-    def _try_api(self, key: str, organization: str) -> List:
+    def _try_api(self, key: str, organization: str) -> list:
         self._ensure_can_call_github()
         try:
             return jsonreader.from_url("https://api.github.com/%s/%s/repos"
@@ -233,7 +231,7 @@ class GitHub:
                                     allowable_calls)
 
     @classmethod
-    def _license_from_entry(cls, projects: List, project_name: str) -> str:
+    def _license_from_entry(cls, projects: list, project_name: str) -> str:
         for project in projects:
             if project.get('name', '') == project_name:
                 lic = project.get('license', {})
