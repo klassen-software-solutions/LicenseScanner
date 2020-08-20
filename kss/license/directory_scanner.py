@@ -4,7 +4,6 @@ import logging
 
 from abc import abstractmethod
 import os
-from typing import Dict, List
 
 import kss.util.jsonreader as jsonreader
 
@@ -26,7 +25,7 @@ class DirectoryScanner(Scanner):
         super().__init__(modulename)
         self._entries = None
 
-    def scan(self) -> List:
+    def scan(self) -> list:
         lics = []
         entries = self.get_project_list()
         for prereq in entries:
@@ -37,7 +36,7 @@ class DirectoryScanner(Scanner):
         return lics
 
     @abstractmethod
-    def get_project_list(self) -> List:
+    def get_project_list(self) -> list:
         """Subclasses must override this to return a list of dictionary objects.
 
         Each object in the returned list should have the following members:
@@ -50,7 +49,7 @@ class DirectoryScanner(Scanner):
 
     # pylint: disable=no-self-use
     #   Justification: self is required as part of the API.
-    def pre_project_callback(self, _project: Dict) -> List:
+    def pre_project_callback(self, _project: dict) -> list:
         """Subclasses may override this to perform work for a given project.
 
         This method will be called by the `scan()` method just before it
@@ -64,7 +63,7 @@ class DirectoryScanner(Scanner):
         return None
 
     @classmethod
-    def _get_existing_prereqs_for_project(cls, project: Dict) -> List:
+    def _get_existing_prereqs_for_project(cls, project: dict) -> list:
         directory = project.get('directory', None)
         if directory:
             filename = "%s/Dependencies/prereqs-licenses.json" % directory
@@ -76,12 +75,12 @@ class DirectoryScanner(Scanner):
         return None
 
     @classmethod
-    def _process_prereq(cls, prereq: Dict) -> Dict:
+    def _process_prereq(cls, prereq: dict) -> dict:
         details = cls._details_for_prereq(prereq)
         return cls._license_from_details(details)
 
     @classmethod
-    def _details_for_prereq(cls, entry: Dict) -> Dict:
+    def _details_for_prereq(cls, entry: dict) -> dict:
         details = entry.copy()
         directory = entry['directory']
         details['license'] = 'Unknown'
@@ -90,7 +89,7 @@ class DirectoryScanner(Scanner):
         return details
 
     @classmethod
-    def _license_from_details(cls, details: Dict) -> Dict:
+    def _license_from_details(cls, details: dict) -> dict:
         lic = {'moduleName': details['name']}
         if details['version']:
             lic['moduleVersion'] = details['version']

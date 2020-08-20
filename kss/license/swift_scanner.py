@@ -3,7 +3,6 @@
 import logging
 import os
 from operator import itemgetter
-from typing import List
 
 import kss.util.command as command
 import kss.util.jsonreader as jsonreader
@@ -41,7 +40,7 @@ class SwiftModuleScanner(DirectoryScanner):
         self._files = self._get_xcode_package_dependency_files()
         return bool(self._files)
 
-    def get_project_list(self) -> List:
+    def get_project_list(self) -> list:
         assert self._files is not None, "Guaranteed by return of should_scan()"
         projects = []
         for filename in self._files:
@@ -54,10 +53,10 @@ class SwiftModuleScanner(DirectoryScanner):
         return projects
 
     @classmethod
-    def _get_xcode_package_dependency_files(cls) -> List:
+    def _get_xcode_package_dependency_files(cls) -> list:
         return find_all('Package.resolved', skipprefix="Tests/")
 
-    def _get_entries_for_xcode_package_dependency_file(self, filename: str) -> List:
+    def _get_entries_for_xcode_package_dependency_file(self, filename: str) -> list:
         entries = []
         for pin in jsonreader.from_file(filename)['object']['pins']:
             name = pin['package']

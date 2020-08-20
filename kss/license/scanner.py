@@ -4,7 +4,6 @@ import bisect
 import logging
 
 from abc import ABC, abstractmethod
-from typing import Dict, List
 
 from .util import GitHub, SPDX
 
@@ -29,14 +28,14 @@ class Scanner(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def scan(self) -> List:
-        """Subclasses must override this to return a List of license entries that should
+    def scan(self) -> list:
+        """Subclasses must override this to return a list of license entries that should
            be recorded for the current project. You may assume that should_scan() has been
            called and has returned True.
         """
         raise NotImplementedError()
 
-    def add_licenses(self, licenses: Dict):
+    def add_licenses(self, licenses: dict):
         """Calls should_scan() and scan() and adds the results to licenses."""
         if self.should_scan():
             logging.info("Running the scanner '%s'", type(self).__name__)
@@ -44,7 +43,7 @@ class Scanner(ABC):
             self._adjust_and_add_new_licenses(new_licenses, licenses)
 
     @classmethod
-    def ensure_used_by(cls, usedby: str, lic: Dict):
+    def ensure_used_by(cls, usedby: str, lic: dict):
         """Ensure that usedby is in the x-usedBy list.
 
         Subclasses may use this if they need to manually add a usedby item. Typically
@@ -60,7 +59,7 @@ class Scanner(ABC):
         else:
             lic['x-usedBy'] = [usedby]
 
-    def _adjust_and_add_new_licenses(self, new_licenses: Dict, licenses: Dict):
+    def _adjust_and_add_new_licenses(self, new_licenses: dict, licenses: dict):
         for lic in new_licenses:
             key = lic['moduleName']
             if key in self._ignored:
@@ -72,7 +71,7 @@ class Scanner(ABC):
                 else:
                     self._merge_or_add_license(lic, licenses)
 
-    def _merge_or_add_license(self, lic: Dict, licenses: Dict):
+    def _merge_or_add_license(self, lic: dict, licenses: dict):
         key = lic['moduleName']
         if key in licenses:
             self._merge_license(lic, licenses[key])
@@ -83,7 +82,7 @@ class Scanner(ABC):
                          lic['moduleName'],
                          lic['moduleLicense'])
 
-    def _resolve_details_and_add_license(self, lic: Dict, licenses: Dict):
+    def _resolve_details_and_add_license(self, lic: dict, licenses: dict):
         if self._should_add_to_used_by(lic):
             self.ensure_used_by(self.modulename, lic)
         if 'moduleLicense' not in lic:
@@ -99,7 +98,7 @@ class Scanner(ABC):
                     self._set_spdx_info_into_license(entry, lic)
         licenses[lic['moduleName']] = lic
 
-    def _merge_license(self, source: Dict, dest: Dict):
+    def _merge_license(self, source: dict, dest: dict):
         if source['moduleName'] != dest['moduleName']:
             raise ValueError('Can only merge licenses of the same module name.')
         if self._should_add_to_used_by(source):
@@ -108,11 +107,11 @@ class Scanner(ABC):
             self.ensure_used_by(usedby, dest)
 
     @classmethod
-    def _set_spdx_info_into_license(cls, spdxentry: Dict, lic: Dict):
+    def _set_spdx_info_into_license(cls, spdxentry: dict, lic: dict):
         lic['moduleLicense'] = spdxentry['name']
         lic['x-spdxId'] = spdxentry['licenseId']
         lic['x-isOsiApproved'] = spdxentry['isOsiApproved']
 
     @classmethod
-    def _should_add_to_used_by(cls, lic: Dict) -> bool:
+    def _should_add_to_used_by(cls, lic: dict) -> bool:
         return 'x-usedBy' not in lic
