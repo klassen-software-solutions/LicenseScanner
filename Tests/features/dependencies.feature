@@ -29,7 +29,7 @@ Feature: Dependency Tracking
      And module "certifi" should be "Mozilla Public License 2.0" with a "MPL-2.0" spdx id
      And module "urllib3" should be "MIT License" with a "MIT" spdx id
      And module "chardet" should be "GNU Lesser General Public License v2.1 only" with a "LGPL-2.1" spdx id
-     And module "idna" should be "BSD-like" with no spdx id
+     And module "idna" should be "BSD 3-Clause \"New\" or \"Revised\" License" with a "BSD-3-Clause" spdx id
      And module "nolicensefile" should be "Unknown" with no spdx id
      And module "nodirectory" should be "Unknown" with no spdx id
 
