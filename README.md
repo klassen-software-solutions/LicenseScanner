@@ -69,8 +69,8 @@ projects that are a part of a larger one.
 If you are going to contribute to this project, please make yourself familiar with the following
 standards and procedures.
 
-* [Git Procedures](https://www.kss.cc/standards-git.html)
-* [Python Coding Standards](https://www.kss.cc/standards-python.html)
+* [Git Procedures](https://klassensoftwaresolutions.ca/standards-git.html)
+* [Python Coding Standards](https://klassensoftwaresolutions.ca/standards-python.html)
 
 _One note on the CI_: For some reason the macOS GitHub VMs always report that no GitHub API calls
 are available, causing the behave tests to fail. As a result we only run the CI on the Linux VMs. Any changes
