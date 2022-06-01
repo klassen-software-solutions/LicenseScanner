@@ -1,5 +1,4 @@
 [
     { "git": "https://github.com/klassen-software-solutions/ksstest.git" },
-    { "pip": "idna" },
-    { "pip": "chardet" }
+    { "pip": "idna" }
 ]
